@@ -1,0 +1,60 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# VSCode settings
+.vscode/settings.json
+.vscode/tasks.json
+.vscode/launch.json
+.vscode/extensions.json
+
+# Dev container files (ignore local state, not config)
+.devcontainer/.env
+.devcontainer/devcontainer.json.local
+
+# pytest cache
+.pytest_cache/
+.cache/
+
+# mypy
+.mypy_cache/
+
+# Coverage reports
+htmlcov/
+.coverage
+.coverage.*
+
+# Test reports
+junitxml_report.xml
+
+# Logs
+*.log
+
+# Python egg files
+*.egg
+*.egg-info/
+dist/
+build/
+
+# Distribution packaging
+*.tar.gz
+*.whl
+
+# Docker
+docker-compose.override.yml
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Terraform
+.terraform
