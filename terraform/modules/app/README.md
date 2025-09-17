@@ -1,7 +1,7 @@
 # Terraform for soi-mlops-video-indexer
 
 ### Usage 
-Don't use this directly.  Call it as a module from an environment in the ../envs directory!
+Don't use this directly.  Call it as a module from an environment!
 
 ### Terraform Module Documention
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
