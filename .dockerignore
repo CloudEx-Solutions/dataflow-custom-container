@@ -1,0 +1,7 @@
+_pycache_
+*pyc
+*mp4
+gha-creds-*.json
+terraform
+.github
+.vscode.pre-commit-config.yaml

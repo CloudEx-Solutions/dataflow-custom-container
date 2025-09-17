@@ -1,0 +1,5 @@
+{
+  "name": "My Pipeline Template",
+  "description": "A Dataflow Flex Template for my pipeline.",
+  "parameters": []
+}

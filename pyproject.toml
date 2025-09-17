@@ -1,0 +1,9 @@
+[project]
+name = "pipeline_package"
+version = "0.1.0"
+dependencies = [
+  "apache-beam[gcp]==2.67.0",
+  "google-cloud-pubsub",
+  "google-cloud-firestore",
+  "google-cloud-storage"
+]
