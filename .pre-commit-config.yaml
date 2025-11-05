@@ -6,9 +6,9 @@ repos:
     - id: terraform_validate
     - id: terraform_tflint
     - id: terraform_docs
-    # - id: terraform_checkov
-      # args:
-      # - --args=--framework terraform
+    - id: terraform_checkov
+      args:
+      - --args=--framework terraform
 - repo: https://github.com/pre-commit/pre-commit-hooks
   rev: v5.0.0 # Get the latest from: https://github.com/pre-commit/pre-commit-hooks/releases
   hooks:
@@ -23,3 +23,4 @@ repos:
       args:
       - "--autofix"
       - "--no-sort-keys"
+
