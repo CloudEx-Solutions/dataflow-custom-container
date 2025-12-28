@@ -59,6 +59,7 @@ python main.py \
 ```
 
 * `--runner DirectRunner`: Specifies that the pipeline should run locally.
+* To run the ffmpeg example, ensure a local file called `sample.mp4` is in the same location as main.py.
 * Add parameters as needed.
 
 ### Cloud Execution (DataflowRunner)
