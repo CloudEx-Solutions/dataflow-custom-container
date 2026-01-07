@@ -16,7 +16,8 @@ Don't use this directly.  Call it as a module from an environment!
 
 | Name | Version |
 |------|---------|
-| <a name="provider_google"></a> [google](#provider\_google) | 6.49.3 |
+| <a name="provider_google"></a> [google](#provider\_google) | 6.50.0 |
+| <a name="provider_random"></a> [random](#provider\_random) | 3.7.2 |
 
 ## Modules
 
@@ -26,10 +27,9 @@ No modules.
 
 | Name | Type |
 |------|------|
-| [google_project_iam_member.artifactregistry_reader_role](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_iam_member) | resource |
-| [google_project_iam_member.dataflow_worker_role](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_iam_member) | resource |
-| [google_service_account.dataflow_sa](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/service_account) | resource |
-| [google_storage_bucket_iam_member.dataflow_sa_data_bucket_admin](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/storage_bucket_iam_member) | resource |
+| [google_artifact_registry_repository.my_docker_repo](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/artifact_registry_repository) | resource |
+| [google_storage_bucket.dataflow_bucket](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/storage_bucket) | resource |
+| [random_id.bucket_suffix](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/id) | resource |
 
 ## Inputs
 
@@ -37,8 +37,12 @@ No modules.
 |------|-------------|------|---------|:--------:|
 | <a name="input_dataflow_gcs_bucket"></a> [dataflow\_gcs\_bucket](#input\_dataflow\_gcs\_bucket) | Name of the bucket to use for dataflow | `string` | n/a | yes |
 | <a name="input_gcp_project"></a> [gcp\_project](#input\_gcp\_project) | Name of the GCP project | `string` | n/a | yes |
+| <a name="input_gcp_region"></a> [gcp\_region](#input\_gcp\_region) | GCP region to deploy resources in | `string` | n/a | yes |
 
 ## Outputs
 
-No outputs.
+| Name | Description |
+|------|-------------|
+| <a name="output_dataflow_bucket_name"></a> [dataflow\_bucket\_name](#output\_dataflow\_bucket\_name) | n/a |
+| <a name="output_repository_url"></a> [repository\_url](#output\_repository\_url) | Output the URL for use in CI/CD pipelines |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

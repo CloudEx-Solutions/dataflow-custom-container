@@ -31,17 +31,24 @@ The necessary Google Cloud Platform (GCP) infrastructure is defined in the `/ter
 3.  **Deploy the Infrastructure**: Navigate to the `terraform/` directory in your terminal and run the following commands to initialize Terraform and apply the configuration.
 
     ```bash
+    gcloud auth login --update-adc
     cd terraform
     terraform init
     terraform apply
     ```
 
-    You will be prompted to review and confirm the resources that will be created. Type `yes` to proceed. This will build all the required GCP resources, such as GCS buckets and Dataflow service accounts.
-    This project assumes you already have a bucket for Dataflow. If not - add it. Make sure to add it to main.tf and pass it in **dataflow_gcs_bucket**.
+    You will be promted to login to your GCP account. After finishing the login, you will be prompted to review and confirm the resources that will be created. Type `yes` to proceed. This will build all the required GCP resources, such as GCS bucket and artifact registry Docker hub. The GCS bucket name will be by default `your-dataflow-bucket-[4 randomly generated numbers]`.
+You will get two outputs:
+
+* repository_url - The artifact registry repo
+* dataflow_bucket_name - The created bucket name.
+
+Note these values
 
 ### 2. Launch the Development Environment
 
 After setting up the infrastructure, open the project in Visual Studio Code. You will be prompted to "Reopen in Container". Click this button to build and launch the devcontainer. This process will install all the dependencies specified in `requirements.txt` inside the container, pre-commits and ensuring your environment is ready for development and deployment.
+
 
 ---
 
@@ -59,7 +66,11 @@ python main.py \
 ```
 
 * `--runner DirectRunner`: Specifies that the pipeline should run locally.
-* To run the ffmpeg example, ensure a local file called `sample.mp4` is in the same location as main.py.
+* To run the ffmpeg example, ensure a local file called `sample.mp4` is in the same location as main.py. Alternatively, use the provided `download.sh`:
+```bash
+chmod +x download.sh
+./download.sh
+```
 * Add parameters as needed.
 
 ### Cloud Execution (DataflowRunner)
@@ -74,12 +85,11 @@ First, build the Docker image defined in the `Dockerfile` and push it to your pr
 # Set your environment variables
 export PROJECT_ID="your-gcp-project-id"
 export REGION="your-gcp-region" 
-export AR_REPO="your-artifact-registry-repo" 
+export AR_REPO="docker-registry" 
 export IMAGE_NAME="your-image-name" 
 export IMAGE_TAG="latest"
-
 export IMAGE_URI="${REGION}-docker.pkg.dev/${PROJECT_ID}/${AR_REPO}/${IMAGE_NAME}:${IMAGE_TAG}"
-
+export DATAFLOW_BUCKET="your-dataflow-bucket-[generated 4 numbers]"
 # Build and push the image
 docker build . -t $IMAGE_URI
 docker push $IMAGE_URI
@@ -102,7 +112,7 @@ Next, create the Flex Template specification file. This command points to the Do
 **Build Command:**
 ```bash
 # Set your template location variable
-export TEMPLATE_GCS_LOCATION="gs://your-gcs-bucket-for-templates/template-name.json"
+export TEMPLATE_GCS_LOCATION="gs://${DATAFLOW_BUCKET}/templates/template-name.json"
 
 gcloud dataflow flex-template build $TEMPLATE_GCS_LOCATION \
     --image $IMAGE_URI \
@@ -115,19 +125,13 @@ gcloud dataflow flex-template build $TEMPLATE_GCS_LOCATION \
 Finally, launch a Dataflow job using the template file you created in the previous step.
 
 ```bash
-# Set additional environment variables
-export TEMP_BUCKET="gs://your-dataflow-temp-bucket-name" # The GCS bucket created by Terraform
-export SUBNETWORK_URL="your-subnetwork-url" # e.g., [https://www.googleapis.com/compute/v1/projects/.../subnetworks/dev](https://www.googleapis.com/compute/v1/projects/.../subnetworks/dev)
-export SERVICE_ACCOUNT_EMAIL="your-dataflow-service-account-email" # As created in Terraform
 
 gcloud dataflow flex-template run "my-pipeline-job-$(date +%Y%m%d-%H%M)" \
     --project=$PROJECT_ID \
     --region=$REGION \
     --template-file-gcs-location=$TEMPLATE_GCS_LOCATION \
-    --temp-location=$TEMP_BUCKET/temp/ \
-    --staging-location=$TEMP_BUCKET/staging/ \
-    --service-account-email=$SERVICE_ACCOUNT_EMAIL \
-    --subnetwork=$SUBNETWORK_URL \
+    --temp-location=$DATAFLOW_BUCKET/temp/ \
+    --staging-location=$DATAFLOW_BUCKET/staging/ \
     --parameters "sdk_container_image=$IMAGE_URI"
 ```
 

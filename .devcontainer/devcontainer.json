@@ -6,19 +6,9 @@
     "ghcr.io/devcontainers/features/terraform:1": {},
     "ghcr.io/dhoeric/features/google-cloud-cli:1": {},
     "ghcr.io/dhoeric/features/terraform-docs:1": {},
-    "ghcr.io/joshuanianji/devcontainer-features/gcloud-cli-persistence:1": {},
-    "ghcr.io/devcontainers-extra/features/checkov:1": {},
-    "ghcr.io/devcontainers-extra/features/pipenv:2": {},
     "ghcr.io/devcontainers-extra/features/pre-commit:2": {},
     "ghcr.io/devcontainers-extra/features/ffmpeg-apt-get:1": {},
-    "ghcr.io/devcontainers/features/docker-in-docker:2": {}
   },
-  "postCreateCommand": "pre-commit install && pip3 install -r requirements.txt && pip install -e .",
-  "customizations": {
-    "vscode": {
-      "extensions": [
-        "googlecloudtools.cloudcode"
-      ]
-    }
-  }
+  "postCreateCommand": "pre-commit install && pip3 install -r requirements.txt && pip install -e ."
+
 }
