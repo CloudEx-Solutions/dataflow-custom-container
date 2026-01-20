@@ -1,4 +1,7 @@
-# Generate a random suffix for uniqueness
+resource "google_project_service" "artifactregistry" {
+  service            = "artifactregistry.googleapis.com"
+  disable_on_destroy = false
+}
 
 # Create the Artifact Registry Repository
 resource "google_artifact_registry_repository" "my_docker_repo" {
@@ -7,6 +10,7 @@ resource "google_artifact_registry_repository" "my_docker_repo" {
   description   = "Docker repository for Dataflow custom containers images"
   format        = "DOCKER"
 
+  depends_on = [google_project_service.artifactregistry]
 }
 
 # Output the URL for use in CI/CD pipelines

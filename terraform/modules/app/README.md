@@ -28,6 +28,8 @@ No modules.
 | Name | Type |
 |------|------|
 | [google_artifact_registry_repository.my_docker_repo](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/artifact_registry_repository) | resource |
+| [google_project_service.artifactregistry](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_service) | resource |
+| [google_project_service.dataflow](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_service) | resource |
 | [google_storage_bucket.dataflow_bucket](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/storage_bucket) | resource |
 | [random_id.bucket_suffix](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/id) | resource |
 
@@ -36,7 +38,6 @@ No modules.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_dataflow_gcs_bucket"></a> [dataflow\_gcs\_bucket](#input\_dataflow\_gcs\_bucket) | Name of the bucket to use for dataflow | `string` | n/a | yes |
-| <a name="input_gcp_project"></a> [gcp\_project](#input\_gcp\_project) | Name of the GCP project | `string` | n/a | yes |
 | <a name="input_gcp_region"></a> [gcp\_region](#input\_gcp\_region) | GCP region to deploy resources in | `string` | n/a | yes |
 
 ## Outputs

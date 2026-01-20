@@ -14,6 +14,9 @@ Follow these steps to set up your development environment and deploy the necessa
 * **Visual Studio Code**: The project is best experienced using VS Code.
 * **VS Code Remote - Containers extension**: This extension is required to open and work within the devcontainer.
 
+Open the project in Visual Studio Code. You will be prompted to "Reopen in Container". Click this button to build and launch a devcontainer. This process will install all needed software dependencies inside a container, ensuring that your environment is ready
+for development and deployment.
+
 ### 1. Configure and Deploy Infrastructure
 
 The necessary Google Cloud Platform (GCP) infrastructure is defined in the `/terraform` directory.
@@ -35,9 +38,10 @@ The necessary Google Cloud Platform (GCP) infrastructure is defined in the `/ter
     cd terraform
     terraform init
     terraform apply
+    cd ..
     ```
 
-    You will be promted to login to your GCP account. After finishing the login, you will be prompted to review and confirm the resources that will be created. Type `yes` to proceed. This will build all the required GCP resources, such as GCS bucket and artifact registry Docker hub. The GCS bucket name will be by default `your-dataflow-bucket-[4 randomly generated numbers]`.
+    You will be promted to login to your GCP account. After finishing the login, you will be prompted to review and confirm the resources that will be created. Type `yes` to proceed. This will build all the required GCP resources, such as GCS bucket and artifact registry Docker hub. The GCS bucket name will be by default `your-dataflow-bucket-[6 randomly generated characters]`.
 You will get two outputs:
 
 * repository_url - The artifact registry repo
@@ -45,14 +49,7 @@ You will get two outputs:
 
 Note these values
 
-### 2. Launch the Development Environment
-
-After setting up the infrastructure, open the project in Visual Studio Code. You will be prompted to "Reopen in Container". Click this button to build and launch the devcontainer. This process will install all the dependencies specified in `requirements.txt` inside the container, pre-commits and ensuring your environment is ready for development and deployment.
-
-
----
-
-## Running the Pipeline
+### 2. Running the Pipeline
 
 All commands should be executed from the terminal within the running devcontainer. The main entry point for the pipeline is `main.py`.
 
@@ -62,7 +59,7 @@ For development and debugging, you can run the pipeline on your local machine us
 
 ```bash
 python main.py \
-    --runner DirectRunner \
+    --runner DirectRunner
 ```
 
 * `--runner DirectRunner`: Specifies that the pipeline should run locally.
@@ -83,13 +80,14 @@ First, build the Docker image defined in the `Dockerfile` and push it to your pr
 
 ```bash
 # Set your environment variables
-export PROJECT_ID="your-gcp-project-id"
-export REGION="your-gcp-region" 
-export AR_REPO="docker-registry" 
-export IMAGE_NAME="your-image-name" 
+export PROJECT_ID="[your-gcp-project-id]"
+export REGION="[your-gcp-region]" 
+export IMAGE_NAME="dataflow-ffmpeg" 
 export IMAGE_TAG="latest"
-export IMAGE_URI="${REGION}-docker.pkg.dev/${PROJECT_ID}/${AR_REPO}/${IMAGE_NAME}:${IMAGE_TAG}"
-export DATAFLOW_BUCKET="your-dataflow-bucket-[generated 4 numbers]"
+export IMAGE_URI="$(cd terraform; terraform output --raw repository_url; cd ..)/${IMAGE_NAME}:${IMAGE_TAG}"
+export DATAFLOW_BUCKET="$(cd terraform; terraform output --raw dataflow_bucket_name ; cd ..)"
+# Authenticate to artifact registry
+gcloud auth configure-docker --quiet $REGION-docker.pkg.dev
 # Build and push the image
 docker build . -t $IMAGE_URI
 docker push $IMAGE_URI
@@ -130,8 +128,8 @@ gcloud dataflow flex-template run "my-pipeline-job-$(date +%Y%m%d-%H%M)" \
     --project=$PROJECT_ID \
     --region=$REGION \
     --template-file-gcs-location=$TEMPLATE_GCS_LOCATION \
-    --temp-location=$DATAFLOW_BUCKET/temp/ \
-    --staging-location=$DATAFLOW_BUCKET/staging/ \
+    --temp-location=gs://$DATAFLOW_BUCKET/temp/ \
+    --staging-location=gs://$DATAFLOW_BUCKET/staging/ \
     --parameters "sdk_container_image=$IMAGE_URI"
 ```
 

@@ -8,6 +8,7 @@
     "ghcr.io/dhoeric/features/terraform-docs:1": {},
     "ghcr.io/devcontainers-extra/features/pre-commit:2": {},
     "ghcr.io/devcontainers-extra/features/ffmpeg-apt-get:1": {},
+    "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {},
   },
   "postCreateCommand": "pre-commit install && pip3 install -r requirements.txt && pip install -e ."
 
