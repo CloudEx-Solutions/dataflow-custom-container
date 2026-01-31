@@ -7,8 +7,6 @@ from pipeline_package.transforms.ffmpeg_transform import ExtractThumbnailFn
 
 
 def run(argv=None):
-    log("Starting your Dataflow job...")
-
     # add common arguments if needed
 
     import argparse
@@ -18,13 +16,15 @@ def run(argv=None):
 
     pipeline_options = PipelineOptions(pipeline_args)
     pipeline_options.view_as(SetupOptions).save_main_session = True
-    pipeline_options.view_as(StandardOptions).streaming = True
+
+    # For the demo we use streaming=false to process a single video
+    pipeline_options.view_as(StandardOptions).streaming = False
 
     with beam.Pipeline(options=pipeline_options) as p:
         (p | "ffmpeg_example" >> beam.Create([
-            'sample.mp4',
+            '/app/sample.mp4',
         ]) | "ExtractThumbnail" >> beam.ParDo(ExtractThumbnailFn())
-            | "PrintResult" >> beam.Map(print))
+            | "PrintResult" >> beam.Map(lambda x: log(f'result : {x}')))
 
 
 if __name__ == '__main__':

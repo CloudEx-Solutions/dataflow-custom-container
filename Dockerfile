@@ -15,7 +15,9 @@ COPY --from=gcr.io/dataflow-templates-base/python311-template-launcher-base /opt
 # Install system-level dependencies like ffmpeg
 
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends ffmpeg && \
+    apt-get install -y --no-install-recommends ffmpeg curl && \
+    curl -L "https://avtshare01.rz.tu-ilmenau.de/avt-vqdb-uhd-1/test_1/segments/bigbuck_bunny_8bit_15000kbps_1080p_60.0fps_h264.mp4" \
+    -o /app/sample.mp4 && \
     rm -rf /var/lib/apt/lists/*
     
 # Copy all your application code and dependency files
