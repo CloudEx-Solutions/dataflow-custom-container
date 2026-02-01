@@ -22,7 +22,7 @@ def run(argv=None):
 
     with beam.Pipeline(options=pipeline_options) as p:
         (p | "ffmpeg_example" >> beam.Create([
-            '/app/sample.mp4',
+            'sample.mp4',
         ]) | "ExtractThumbnail" >> beam.ParDo(ExtractThumbnailFn())
             | "PrintResult" >> beam.Map(lambda x: log(f'result : {x}')))
 

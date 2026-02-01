@@ -3,8 +3,7 @@ FROM python:3.11-slim
 # Set a working directory
 
 
-WORKDIR /app
-
+WORKDIR /
 
 
 # Copy the launcher binary from the first stage into our main image
@@ -17,7 +16,7 @@ COPY --from=gcr.io/dataflow-templates-base/python311-template-launcher-base /opt
 RUN apt-get update && \
     apt-get install -y --no-install-recommends ffmpeg curl && \
     curl -L "https://avtshare01.rz.tu-ilmenau.de/avt-vqdb-uhd-1/test_1/segments/bigbuck_bunny_8bit_15000kbps_1080p_60.0fps_h264.mp4" \
-    -o /app/sample.mp4 && \
+    -o /sample.mp4 && \
     rm -rf /var/lib/apt/lists/*
     
 # Copy all your application code and dependency files
@@ -35,7 +34,7 @@ RUN pip install .
 RUN pip check
 
 # Set the environment variable to point to your pipeline's entrypoint file.
-ENV FLEX_TEMPLATE_PYTHON_PY_FILE=/app/main.py
+ENV FLEX_TEMPLATE_PYTHON_PY_FILE=/main.py
 
 # Set the entrypoint to the launcher binary.
 ENTRYPOINT ["/opt/apache/beam/boot"]
